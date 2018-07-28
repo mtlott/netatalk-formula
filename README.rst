@@ -1,4 +1,4 @@
-samba
+netatalk
 =====
 Install and configure a netatalk server.
 
@@ -6,6 +6,10 @@ Install and configure a netatalk server.
 
     See the full `Salt Formulas installation and usage instructions
     <http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
+    
+.. note::
+
+    Some distros do not include netatalk so this formula allows the specification of a pkgrepo to pull the package. Specifically for Fedora 28 this formula pulls a built version from my public COPR repo. This is the only OS this has been tested on. Your results may vary. Pull requests accepted for anything you find. Enjoy!
 
 Available states
 ================
