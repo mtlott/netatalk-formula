@@ -1,0 +1,62 @@
+# -* coding: utf-8 -*-
+# vim: ft=jinja
+# OS family parameters overriding defaults
+
+{% set netatalk_osmap = salt['grains.filter_by']({
+    'default':{
+        'service': 'netatalk',
+        },
+     'RedHat':{
+          'service': 'netatalk',
+          'pkgrepo': {
+            'name': 'mtlott_netatalk',
+            'humanname': 'Copr repo for netatalk owned by mtlott',
+            'baseurl': 'https://copr-be.cloud.fedoraproject.org/results/mtlott/netatalk/fedora-$releasever-$basearch/',
+            'gpgcheck': 1,
+            'gpgkey': 'https://copr-be.cloud.fedoraproject.org/results/mtlott/netatalk/pubkey.gpg',
+            'skip_if_unavailable': 'True',
+            'enabled': 1,
+            'repo_gpgcheck': 0,
+            'enabled_metadata': 1
+        },
+     },
+    'Debian': {
+        'service': salt['grains.filter_by']({
+	      'lenny': 'netatalk',
+	      'squeeze': 'netatalk',
+	      'wheezy': 'netatalk',
+          'jessie': 'netatalk',
+          'stretch': 'netatalk',
+	    }, grain='oscodename', default='lenny'),
+     },
+     'Suse':{
+          'service': 'netatalk',
+          'preinstall': {
+               'cmd': 'zypper --non-interactive dup --no-allow-vendor-change',
+               'osreleases': [42],
+             },
+     },
+     'Arch': {
+         'service': 'netatalk',
+     },
+     'FreeBSD': {
+         'server': 'netatalk',
+         'config': '/usr/local/etc/smb4.conf',
+     },
+     'MacOS': {
+   },
+ }, grain='os_family', merge=salt['grains.filter_by']({
+     'Ubuntu': {
+        'service': salt['grains.filter_by']({
+            'xenial': 'netatalk',
+            'trusty': 'netatalk',
+         }, grain='oscodename', default='xenial'),
+      },
+    }, grain='os')
+)%}
+
+{# start with defaults, merge osmappings, and finally pillars #}
+{% import_yaml "netatalk/defaults.yaml" as defaults %}
+{% do defaults.netatalk.update( netatalk_osmap ) %}
+{% set netatalk = salt['pillar.get']( 'netatalk', default=defaults.netatalk, merge=True) %}
+

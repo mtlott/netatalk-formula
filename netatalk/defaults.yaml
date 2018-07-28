@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+# Default lookup dictionary
+netatalk:
+  server: netatalk
+  config: /etc/netatalk/afp.conf
+  config_src: salt://netatalk/template/afp.conf
+  afppasswd: /etc/netatalk/afppasswd
+  root_group: root
+
+  conf:
+    render:
+      #### Inherit these as afp.conf defaults.
+      section_order: ['Global', 'Homes',]
+      include_skeleton: yes
+    sections:
+      Global:
+        vol preset: Defaults
+      Defaults:
+        ea: samba
+      Homes:
+        basedir regex: /home
+
+  users:
+
+  preinstall:
+    cmd:
+    osreleases: []
+

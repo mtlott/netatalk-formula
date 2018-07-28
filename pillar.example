@@ -1,0 +1,26 @@
+  netatalk:
+    hostname: AppleTalkServer
+    conf:
+      render:
+        ## List the sections your smb.conf should include (optional)
+        section_order: ['global', 'Defaults', 'Homes', 'My Time Machine Volume', 'eBooks']
+
+      sections:
+        global:
+          vol preset: Defaults
+
+        Defaults:
+          ea: samba
+
+        Homes:
+          basedir regex: /home
+
+        My Time Machine Volume:
+          path: /mnt/timemachine
+          time machine: yes
+          spotlight: no
+
+        eBooks:
+          path: /mnt/md0/eBooks
+          spotlight: yes
+
